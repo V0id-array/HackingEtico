@@ -6,10 +6,6 @@
 
 + Félix Sánchez González
 
-+ Francisco Javier Rodríguez Acosta
-
-+ Santiago Domínguez Gómez
-
 ## 
 
 ## **Índice**  

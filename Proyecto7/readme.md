@@ -1,10 +1,8 @@
 
 # Informe de Pruebas de Penetración - CyberSecPro S.A.
 
-*   **Grupo 2 (Secure Shield Pentesting S.L.):**
+*   **Félix (Secure Shield Pentesting S.L.):**
     *   Félix Sánchez González
-    *   Francisco Javier Rodriguez
-    *   Santiago Domínguez Gómez
 *   **Fecha del Informe:** 2025-05-05
 *   **Periodo de Evaluación:** 2025-05-02 - 2025-05-05
 
@@ -153,7 +151,7 @@ Este informe ha sido elaborado con base en la evaluación de seguridad realizada
 
 ## 5.1 Resumen Ejecutivo
 
-Durante la prueba de penetración realizada sobre el entorno simulado de CyberSecPro S.A., el equipo (Grupo 2) identificó y explotó con éxito múltiples vulnerabilidades críticas en los sistemas objetivo (PC1 a PC5). Partiendo de un acceso inicial al sistema expuesto externamente (PC1) mediante la vulnerabilidad BlueKeep (CVE-2019-0708), se obtuvo control administrativo (SYSTEM).
+Durante la prueba de penetración realizada sobre el entorno simulado de CyberSecPro S.A., el auditor (Félix) identificó y explotó con éxito múltiples vulnerabilidades críticas en los sistemas objetivo (PC1 a PC5). Partiendo de un acceso inicial al sistema expuesto externamente (PC1) mediante la vulnerabilidad BlueKeep (CVE-2019-0708), se obtuvo control administrativo (SYSTEM).
 
 Desde este punto, se establecieron técnicas de pivoting para acceder a los segmentos de red internos (10.10.10.0/24, 10.10.20.0/24, 10.10.30.0/24). Se comprometieron sucesivamente los sistemas PC2, PC3, PC4 y PC5, explotando una variedad de vulnerabilidades que incluían Inclusión Local de Ficheros (LFI), Log Poisoning, configuraciones inseguras de SUID y Capacidades Linux, exposición de backups con credenciales, y configuraciones débiles de sudo.
 

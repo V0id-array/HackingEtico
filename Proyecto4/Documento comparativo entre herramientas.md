@@ -6,11 +6,6 @@
 
 + Félix Sánchez González
 
-+ Francisco Javier Rodríguez Acosta
-
-+ Santiago Domínguez Gómez 
-
-
 ## **Índice**  
 
 [**1. Escaneos en OpenVAS**](#1-escaneos-en-openvas)  
