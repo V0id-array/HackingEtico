@@ -1,8 +1,7 @@
 
 # Informe de Pruebas de Penetración - CyberSecPro S.A.
 
-*   **Félix (Secure Shield Pentesting S.L.):**
-    *   Félix Sánchez González
+*   **por:** Félix Sánchez González (Secure Shield Pentesting S.L.)
 *   **Fecha del Informe:** 2025-05-05
 *   **Periodo de Evaluación:** 2025-05-02 - 2025-05-05
 
