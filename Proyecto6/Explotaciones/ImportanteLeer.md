@@ -1,0 +1,2 @@
+- Chicos aqui vamos ha ir subiendo las carpetas con el nombre de vulenrabilidad dentro de esa carpeta tiene que estar el.md y otra carpeta con el nombre de `Imagenes`
+- Asi facilitamos un poco las cosas

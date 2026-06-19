@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>El Ticket Perdido</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>🎟️ El Ticket Perdido</h2>
+  <p>
+    Has encontrado un ticket misterioso, pero está cubierto por una capa dorada que debes rascar para revelar su contenido oculto.
+    Sin embargo, tu rascador tiene una barra de vida y solo puede usarse un número limitado de veces antes de romperse.
+    Debes rascarlo completamente (100%) para obtener la flag.
+  </p>
+
+  <div class="game-container">
+    <canvas id="scratch" width="300" height="150"></canvas>
+    <p id="vida">🔋 Vida del rascador: <span id="barraVida">100</span>%</p>
+  </div>
+
+  <input type="text" id="input-contraseña" placeholder="Introduce la contraseña...">
+  <button id="btn-restaurar">Recargar Vida</button>
+  <p id="mensaje"></p>
+
+
+  <script src="effect.js"></script>
+</body>
+</html>

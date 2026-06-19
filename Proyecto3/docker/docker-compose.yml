@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: php5-apache-sqlite
+    ports:
+      - "8080:80" # Redirige el puerto 80 del contenedor al puerto 8080 en el host
+    volumes:
+      - ./src:/var/www/html # Monta el código fuente desde la carpeta `src` en el host

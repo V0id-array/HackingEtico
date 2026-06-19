@@ -1,0 +1,13 @@
+{
+  "name": "sqli-app",
+  "version": "1.0.0",
+  "description": "SQL Injection Vulnerable App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.7"
+  }
+}

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQLi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVdMqPcHmijSswkWpG8FqxyZgJOoEjE+7LGQQgCwVhVuNr+rVt3mTgsykpRgnZg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #content {
+            width: 960px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            background-color: #0e7ab9;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-bar-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .progress-bar-dots {
+            display: flex;
+            margin-top: 5px;
+        }
+
+        .progress-bar-dots .x {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #fff;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .progress-bar-dots .x.active {
+            background-color: yellow;
+        }
+
+
+        .browser {
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .browser-header {
+            background-color: #eee;
+            padding: 10px;
+            border-bottom: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+        }
+
+        .browser-buttons {
+            display: flex;
+        }
+
+        .browser-buttons div {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+        }
+
+        .browser-address-bar {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 5px 10px;
+            margin-left: 10px;
+            flex-grow: 1;
+        }
+
+        .browser-address-bar input {
+            border: none;
+            width: 100%;
+            outline: none;
+        }
+
+        .browser-body {
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .results-container {
+            margin-top:20px;
+        }
+
+        .results-container .results-box:last-child {
+            margin-left:20px;
+        }
+
+        .results-box {
+            width:313px;
+            float:left;
+            border:1px solid #ececec;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .results-box .results-header {
+            background-color: #0e7ab9;
+            color:#FFF;
+            text-align: center;
+            padding:7px;
+            font-weight: bold;
+        }
+
+        .results-box .results-body {
+            padding:10px;
+            background-color: #f9f9f9;
+        }
+
+        .results-box .results-body.text-center {
+            text-align: center;
+        }
+
+        .results-box .results-body input.form-control {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        .thm_button {
+            background-color: #0e7ab9;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .popup .alertbox {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .popup .alertbox .alertmsg {
+            margin-bottom: 15px;
+        }
+
+
+    </style>
+</head>
+<body onload="performSearch()">
+
+<div class="popup" style="display: none;">
+    <div class="alertbox">
+        <div class="alertmsg">Incorrect Password</div>
+        <div class="alertbtn"><button class="thm_button closealert">Close</button></div>
+    </div>
+</div>
+<div class="progress-bar">
+    <div style="display: flex;height: 100%;align-items: center;padding-left: 20px;">
+        <div style="font-size: 35px;margin-right:10px"><i class="fal fa-server"></i></div>
+        <div>
+            <div class="progress-bar-title">Página vulnerable a SQL</div>
+        </div>
+    </div>
+</div>
+<div id="content">
+
+    <style>
+        div.browser-body h3 {
+            margin:10px 0 0 0;padding:0
+        }
+
+        div.browser-body p {
+            margin:0;padding:0;font-size:12px;
+        }
+
+        div.browser-body div {
+            margin-top:10px;
+        }
+
+        .questions-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .question-statement {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .answer {
+            margin-bottom: 5px;
+        }
+
+        .answer input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        .answer-button {
+            background-color: #0e7ab9;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    </style>
+
+
+    <div class="browser">
+        <div class="browser-header">
+            <div class="browser-buttons">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="browser-address-bar">
+                <input id="address_url" value="https://website.com/article?id=1">
+            </div>
+            <button id="search_button" class="thm_button" style="margin-left: 10px; padding: 5px 10px;">Search</button>
+        </div>
+        <div class="browser-body">
+        </div>
+    </div>
+
+    <style>
+
+        .results-box {
+            margin-bottom: 20px;
+            clear: both; /* Add clear: both to prevent floating issues */
+        }
+
+
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .question-statement {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .answer {
+            margin-bottom: 5px;
+        }
+
+        .answer input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        .answer-button {
+            background-color: #0e7ab9;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .results-box {
+            width: 100%; /* Make results-box 100% width of parent */
+            border:1px solid #ececec;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px; /* Add margin to separate from results-container */
+        }
+
+        .results-box .results-header {
+            background-color: #0e7ab9;
+            color:#FFF;
+            text-align: center;
+            padding:7px;
+            font-weight: bold;
+        }
+
+        .results-box .results-body {
+            padding:5px;
+        }
+
+    </style>
+
+    <div class="results-box">
+        <div class="results-header">SQL Query</div>
+        <div class="results-body sql-query">select * from article where id = 1</div>
+    </div>
+
+
+    <div class="results-container">
+        
+    </div>
+
+    <style>
+        .questions-container {
+            margin-top: 40px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            clear: both;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .question-statement {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .answer {
+            margin-bottom: 5px;
+        }
+
+        .answer input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        .answer-button {
+            background-color: #0e7ab9;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+    <div class="questions-container">
+        <div class="question">
+            <div class="question-statement">Pregunta 1:¿Que motor de bases de datos está utilizando la web? Formato: sql3 (solo la versión principal) </div>
+            <input type="text" class="answer-input" placeholder="Your answer">
+            <button class="answer-button">Submit</button>
+        </div>
+        <div class="question">
+            <div class="question-statement">Pregunta 2: Descubre el número de columnas en la consulta</div>
+            <input type="text" class="answer-input" placeholder="Your answer">
+            <button class="answer-button">Submit</button>
+        </div>
+        <div class="question">
+            <div class="question-statement">Pregunta 3 Encuentra el nombre de la tabla que guarda los usuarios</div>
+            <input type="text" class="answer-input" placeholder="Your answer">
+            <button class="answer-button">Submit</button>
+        </div>
+        <div class="question">
+            <div class="question-statement">Pregunta4: ¿Cuál es la contraseña de Martin?</div>
+            <input type="text" class="answer-input" placeholder="Your answer">
+            <button class="answer-button">Submit</button>
+        </div>
+    </div>
+
+    
+    </div>
+
+    <script>
+
+        function performSearch() {
+
+            let url = document.getElementById('address_url').value;
+            if( url.substring(0,31) === 'https://website.com/article?id=' ) {
+                let sql = url.substring(31,1000);
+
+                document.getElementsByClassName('browser-body')[0].innerHTML = '';
+                fetch("/article?id=" + sql, {
+                    method: "GET",
+                }).then(function (resp) {
+                    resp.json().then(function (data) {
+                        document.getElementsByClassName('sql-query')[0].innerHTML = data.query;
+                        if( data.error ){
+                            document.getElementsByClassName('browser-body')[0].innerHTML = '<div class="alert alert-danger"><p><b>SQL Error:</b></p><pre>' + data.error + '</pre></div>';
+                        }else if (data.results && data.results.length > 0) {
+                            document.getElementsByClassName('browser-body')[0].innerHTML = '<h3>' + data.results[0].subject + '</h3><p>Article ID: ' + data.results[0].id + '</p><div>' + data.results[0].content + '</div>';
+                        } else {
+                            document.getElementsByClassName('browser-body')[0].innerHTML = 'No articles found.';
+                        }
+                    })
+                });
+
+            }else{
+                alert('URL Invalid 404');
+            }
+        }
+
+        document.getElementById('address_url').addEventListener('keyup',function(r){
+            if( r.key === 'Enter' ){
+                performSearch();
+            }
+        });
+
+        document.getElementById('search_button').addEventListener('click', function() {
+            performSearch();
+        });
+
+        const questions = document.querySelectorAll('.question');
+
+        questions.forEach((question, index) => {
+            const submitButton = question.querySelector('.answer-button');
+            const answerInput = question.querySelector('.answer-input');
+
+            submitButton.addEventListener('click', () => {
+                const answer = answerInput.value;
+                const questionNumber = `question${index + 1}`;
+
+                fetch('/submitAnswer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: questionNumber, answer: answer })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.flag) {
+                        // Display the flag in a popup
+                        const popup = document.querySelector('.popup');
+                        const alertmsg = popup.querySelector('.alertmsg');
+                        alertmsg.textContent = `Flag: ${data.flag}`;
+                        popup.style.display = 'block';
+                    } else if (data.error === "Respuesta incorrecta") {
+                        // Display the error message in a popup
+                        const popup = document.querySelector('.popup');
+                        const alertmsg = popup.querySelector('.alertmsg');
+                        alertmsg.textContent = `Respuesta incorrecta`;
+                        popup.style.display = 'block';
+                    } else if (data.error) {
+                        // Display the error message in a popup
+                        const popup = document.querySelector('.popup');
+                        const alertmsg = popup.querySelector('.alertmsg');
+                        alertmsg.textContent = `Error: ${data.error}`;
+                        popup.style.display = 'block';
+                    }
+                });
+            });
+        });
+
+        // Close popup functionality
+        const closealert = document.querySelector('.closealert');
+        const popup = document.querySelector('.popup');
+
+        closealert.addEventListener('click', function() {
+            popup.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

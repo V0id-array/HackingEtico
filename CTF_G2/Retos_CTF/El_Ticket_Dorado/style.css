@@ -1,0 +1,71 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color: rgb(255, 242, 0);
+  text-align: center;
+  padding: 1em;
+}
+
+body {
+  background-image: url('DALL·E\ 2025-03-21\ 18.55.54\ -.webp'); /* Ruta de la imagen */
+  background-size: cover;  /* Ajusta la imagen para cubrir toda la pantalla */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que se repita */
+  background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
+}
+/* Contenedor principal */
+.game-container {
+  margin: 2em auto;
+  position: relative;
+  width: 320px; /* un poco más grande que el canvas */
+}
+
+/* El canvas donde se rasca */
+#scratch {
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Barra de vida */
+#vida {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+/* Input y botón para restaurar vida */
+#input-contraseña,
+#btn-restaurar {
+  display: none; /* Se mostrarán cuando se rompa el rascador */
+  margin-top: 10px;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
+}
+/* 
+   Prueba con esto ilovescratch 😎
+*/
+
+#btn-restaurar {
+  background: #00bcd4;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+#btn-restaurar:hover {
+  background: #0097a7;
+}
+
+/* Mensajes */
+#mensaje {
+  margin-top: 10px;
+  font-size: 16px;
+  min-height: 1.2em;
+}

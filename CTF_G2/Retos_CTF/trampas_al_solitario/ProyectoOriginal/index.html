@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>Solitario web</title>
+<link rel="stylesheet" href="tableroSolitario.css">
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="cronometro.js"></script>
+<script type="text/javascript" src="solitario.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+   crearCartas();
+   InicializarCrono();
+});
+</script>
+</head>
+
+<div id="todo">
+  <div id="centro">
+    <header>
+      <center><h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 36px; color: #333;">Solitario web</h1></center>
+    </header>
+  <!-- Encabezado de la página -->
+  <div id="centro">
+
+
+  
+  <!-- Cuerpo de la página -->
+  <body background="fondo/background.jpg">
+
+
+      <center>
+      <!--division principal del juego de solitario-->
+      <div id="tablero" onclick="debug()">
+        <div id="divTiempo"></div>
+        <div id="divPuntuacion">Puntos: 0</div>
+        <div id="nuevoJuego"><input type="button" value="Nuevo Juego" onclick="nuevoJuego()"></div>
+        <div id="mazoPrincipal"  class="cTablero" onclick="regresarCartasMazoPrincipal()"></div>
+        <div id="mazoSecundario" class="cTablero"></div>
+        <div id="pila1" class="cTablero" onclick="clicPilaAlta()"></div>
+        <div id="pila2" class="cTablero" onclick="clicPilaAlta()"></div>
+        <div id="pila3" class="cTablero" onclick="clicPilaAlta()"></div>
+        <div id="pila4" class="cTablero" onclick="clicPilaAlta()"></div>
+      </div>
+      </center>
+      <p style="text-align: center;">Por Félix Sánchez González, para el CTF de 2025 del IES Rafael Alberti</p>
+  </body>
+  
+  </div>
+</div>
+
+</html>
